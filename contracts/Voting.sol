@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
@@ -10,7 +10,7 @@ import "hardhat/console.sol";
 contract VotingFactory {
     address[] public deployedVotings;
 
-    function createVoting(int price, int timelimit, uint successnumber) public {
+    function createVoting(uint price, uint timelimit, uint successnumber) public {
       require(successnumber > 1, "successnumber should integer");
       Voting newVoting = new Voting(price, timelimit, successnumber, msg.sender);
       deployedVotings.push(address(newVoting));
@@ -34,8 +34,8 @@ contract Voting {
   address[] public itemVoterList;
 
   uint  minSuccesssNumber;
-  int  baseTimePeriod;
-  int  Itemprice;
+  uint  baseTimePeriod;
+  uint  Itemprice;
   address owner;
 
   event Voteradded(uint indexed itemID);
@@ -51,7 +51,7 @@ contract Voting {
       _;
   }
 
-  constructor (int _itemPrice, int _baseTimePeriod, uint _minSuccesssNumber, address _owner) onlyOwner {      
+  constructor (uint _itemPrice, uint _baseTimePeriod, uint _minSuccesssNumber, address _owner) {      
       Itemprice = _itemPrice;
       baseTimePeriod = _baseTimePeriod;
       minSuccesssNumber = _minSuccesssNumber;
@@ -73,7 +73,7 @@ contract Voting {
     emit Voteradded(_ItemId);
   }
 
-  function setBaseTimePeriod(int _baseTimePeriod) external onlyOwner {
+  function setBaseTimePeriod(uint _baseTimePeriod) external onlyOwner {
     require(baseTimePeriod > _baseTimePeriod, 
     "Can't count up limit time");
     baseTimePeriod = _baseTimePeriod;
@@ -93,7 +93,7 @@ contract Voting {
       return itemVoterList.length;
   } 
 
-  function postpone(int _baseTimePeriod) external onlyOwner {
+  function postpone(uint _baseTimePeriod) external onlyOwner {
     require(0 == itemVoterList.length || minSuccesssNumber <=  itemVoterList.length, 
     "Can't postpone ongoing vote");
     baseTimePeriod = _baseTimePeriod;
