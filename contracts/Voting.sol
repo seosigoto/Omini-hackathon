@@ -113,10 +113,9 @@ contract Voting {
 }
 
 contract MintNFT is ERC1155, Ownable {
-  constructor() ERC1155("") {}
-
-  function setURI(string memory newuri) public onlyOwner {
-      _setURI(newuri);
+  
+   constructor(string memory _URI) ERC1155(_URI) onlyOwner {
+      _setURI(_URI);
   }
 
   function mint(address account, uint256 id, uint256 amount, bytes memory data)

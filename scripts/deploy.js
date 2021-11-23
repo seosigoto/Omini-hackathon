@@ -22,9 +22,21 @@ async function main() {
 
   console.log("Greeter deployed to:", votingomni.address);
 
+
+  let baseTokenURI = "https://gateway.pinata.cloud/ipfs/QmSWFAGXjoQt65U42qqkPntPa7Z5Pmw5p7LA8UbCBLxg4h/";
+
+
+  const MintNFT1155 = await hre.ethers.getContractFactory("MintNFT");
+  const mintnft1155 = await MintNFT1155.deploy(baseTokenURI);
+  await mintnft1155.deployed();
+  console.log("erc1155 deployed to:", mintnft1155.address);
+
+
+
   let config  = `
   module.exports = {
-    votingomniAddress: "${votingomni.address}"
+    votingomniAddress: "${votingomni.address}",
+    mintnft1155Address: "${mintnft1155.address}"
   }`
 
   let data = JSON.stringify(config)
