@@ -63,8 +63,11 @@ contract Voting {
     (bool success, ) = owner.call{value: price}("");
     require(success, "Failed to send ETH");
     require(baseTimePeriod > 0, "This vote is over already");
+    (, , VoterStatus temp) = getItemvoter(_voter);
+    require(temp == VoterStatus.unverified, "Revoting error");
+    // require(itemvoter.status == VoterStatus.unverified, "you are already voted");
     price = 0;
-    Itemvoter memory itemvoter = itemVoters[_voter];
+    Itemvoter storage itemvoter = itemVoters[_voter];
     itemvoter.itemnumber = _ItemId;
     itemvoter.voterAddress = _voter;
     itemvoter.status = VoterStatus.verified;
@@ -84,9 +87,10 @@ contract Voting {
   }
   
   function getItemvoter(address _address) public view returns (uint, address, VoterStatus) {
-      return (itemVoters[_address].itemnumber,
-        itemVoters[_address].voterAddress,
-        itemVoters[_address].status);
+    require(itemVoters[_address].voterAddress != address(0x0), "Vote address error");
+    return (itemVoters[_address].itemnumber,
+      itemVoters[_address].voterAddress,
+      itemVoters[_address].status);
   }
   
   function countItemvoters() public view returns (uint) {
