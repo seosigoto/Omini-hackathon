@@ -87,7 +87,7 @@ contract Voting {
   }
   
   function getItemvoter(address _address) public view returns (uint, address, VoterStatus) {
-    require(itemVoters[_address].voterAddress != address(0x0), "Vote address error");
+    // require(itemVoters[_address].voterAddress != address(0x0), "Vote address error");
     return (itemVoters[_address].itemnumber,
       itemVoters[_address].voterAddress,
       itemVoters[_address].status);
